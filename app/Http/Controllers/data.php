@@ -280,10 +280,20 @@ class data extends BaseController
         $log = DB::getQueryLog();
 
         if ($query3[0]->time) $query3[0]->time = json_decode($query3[0]->time, true);
-
         for ($i=0; $i < count($type); $i++) {
-            if ($query3[0]->$type[$i]) $query3[0]->$type[$i] = json_decode($query3[0]->$type[$i], true);
+            $string = (string)($type[$i]);
+            if ($string == 'atp') $query3[0]->atp = json_decode($query3[0]->atp, true);
+            if ($string == 'ec') $query3[0]->ec = json_decode($query3[0]->ec, true);
+            if ($string == 'humidity') $query3[0]->humidity = json_decode($query3[0]->humidity, true);
+            if ($string == 'luminance') $query3[0]->luminance = json_decode($query3[0]->luminance, true);
+            if ($string == 'ph') $query3[0]->ph = json_decode($query3[0]->ph, true);
+            if ($string == 'soil_humid') $query3[0]->soil_humid = json_decode($query3[0]->soil_humid, true);
+            if ($string == 'soil_temp') $query3[0]->soil_temp = json_decode($query3[0]->soil_temp, true);
+            if ($string == 'temp') $query3[0]->temp = json_decode($query3[0]->temp, true);
+            if ($string == 'uv') $query3[0]->uv = json_decode($query3[0]->uv, true);
         }
+
+
         // dd($log[0]['bindings']);
         // $log[1]['bindings'][0] = '`'. str_replace('.','`.`',$log[0]['bindings'][1]) . '`';
         // $data = DB::select($log[0]['query'], [$log[0]['bindings'][0], $log[0]['bindings'][1]]);
