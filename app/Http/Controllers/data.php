@@ -22,7 +22,7 @@ class data extends BaseController
         $data = $request->all();
 
         if (!$data) {
-            return response()->json(['status' => 400, 'msg' => "failed", 'request' => $request, 'request_data' => $data, 'request_data_content' => $request->getContent()]);
+            return response()->json(['status' => 400, 'msg' => "沒有傳送任何資料", 'request' => $request, 'request_data' => $data, 'request_data_content' => $request->getContent()]);
         }
         $type = $data["type"];
         $start_time = $data["start_time"];
