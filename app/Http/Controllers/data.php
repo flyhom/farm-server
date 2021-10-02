@@ -171,7 +171,7 @@ class data extends BaseController
                 array_push($select_arr, DB::raw('round('. $type[0].'.value, 2) as '.$type[0]));
 
                 array_push($select_concat_arr,DB::raw("concat('[',GROUP_CONCAT(time),']') as time"));
-                array_push($select_concat_arr,DB::raw("concat('[',GROUP_CONCAT(". $type[0]. "),']') as time"));
+                array_push($select_concat_arr,DB::raw("concat('[',GROUP_CONCAT(". $type[0]. "),']') as ". $type[0]));
             }else if(count($type) > 1) {
                 $groupby = $type[0]. '.time';
                 for ($i=0; $i < count($type); $i++) {
@@ -199,7 +199,7 @@ class data extends BaseController
                 array_push($select_arr, DB::raw('round(AVG('. $type[0].'.value), 2) as '.$type[0]));
 
                 array_push($select_concat_arr,DB::raw("concat('[',GROUP_CONCAT(time),']') as time"));
-                array_push($select_concat_arr,DB::raw("concat('[',GROUP_CONCAT(". $type[0]. "),']') as time"));
+                array_push($select_concat_arr,DB::raw("concat('[',GROUP_CONCAT(". $type[0]. "),']') as ". $type[0]));
             }else if(count($type) > 1) {
                 $groupby = DB::raw('date_format('. $type[0]. '.time, "%Y-%m-%d %H")');
                 for ($i=0; $i < count($type); $i++) {
@@ -227,7 +227,7 @@ class data extends BaseController
                 array_push($select_arr, DB::raw('round(AVG('. $type[0].'.value), 2) as '.$type[0]));
 
                 array_push($select_concat_arr,DB::raw("concat('[',GROUP_CONCAT(time),']') as time"));
-                array_push($select_concat_arr,DB::raw("concat('[',GROUP_CONCAT(". $type[0]. "),']') as time"));
+                array_push($select_concat_arr,DB::raw("concat('[',GROUP_CONCAT(". $type[0]. "),']') as ". $type[0]));
             }else if(count($type) > 1) {
                 $groupby = DB::raw('DATE('. $type[0]. '.time)');
                 for ($i=0; $i < count($type); $i++) {
