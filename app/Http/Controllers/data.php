@@ -181,6 +181,7 @@ class data extends BaseController
                         array_push($select_arr, DB::raw('round('. $type[$i].'.value, 2) as '.$type[$i]));
 
                         array_push($select_concat_arr,DB::raw("concat('[',GROUP_CONCAT(time),']') as time"));
+                        array_push($select_concat_arr,DB::raw("concat('[',GROUP_CONCAT(". $type[$i]. "),']') as ". $type[$i]));
                     }else {
                         $table = $table. ', '. $type[$i];
                         array_push($select_arr, DB::raw('round('. $type[$i].'.value, 2) as '.$type[$i]));
@@ -209,6 +210,7 @@ class data extends BaseController
                         array_push($select_arr, DB::raw('round(AVG('. $type[$i].'.value), 2) as '.$type[$i]));
 
                         array_push($select_concat_arr,DB::raw("concat('[',GROUP_CONCAT(time),']') as time"));
+                        array_push($select_concat_arr,DB::raw("concat('[',GROUP_CONCAT(". $type[$i]. "),']') as ". $type[$i]));
                     }else {
                         $table = $table. ', '. $type[$i];
                         array_push($select_arr, DB::raw('round(AVG('. $type[$i].'.value), 2) as '.$type[$i]));
@@ -237,6 +239,7 @@ class data extends BaseController
                         array_push($select_arr, DB::raw('round(AVG('. $type[$i].'.value), 2) as '.$type[$i]));
 
                         array_push($select_concat_arr,DB::raw("concat('[',GROUP_CONCAT(time),']') as time"));
+                        array_push($select_concat_arr,DB::raw("concat('[',GROUP_CONCAT(". $type[$i]. "),']') as ". $type[$i]));
                     }else {
                         $table = $table. ', '. $type[$i];
                         array_push($select_arr, DB::raw('round(AVG('. $type[$i].'.value), 2) as '.$type[$i]));
