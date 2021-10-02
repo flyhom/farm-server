@@ -20,6 +20,10 @@ class data extends BaseController
         date_default_timezone_set('Asia/Taipei');
 
         $data = $request->all();
+
+        if (!$data) {
+            return response()->json(['status' => 400, 'msg' => "failed", 'request' => $request, 'request_data' => $data, 'request_data_content' => $request->getContent()]);
+        }
         $type = $data["type"];
         $start_time = $data["start_time"];
         $end_time = $data["end_time"];
@@ -36,7 +40,7 @@ class data extends BaseController
         // $select_arr = [$tableArr[0].'.time as time', $tableArr[0].'.value as '.$tableArr[0], $tableArr[1].'.value as '.$tableArr[1]];
         // $table = $tableArr[0]. ','. $tableArr[1];
         if (count($type) < 1) {
-            return response()->json(['status' => 400, 'msg' => "success", 'log' => $log, 'test' => $select_arr, 'datas' => $query]);
+            return response()->json(['status' => 400, 'msg' => "請選擇適用的sensor"]);
         }
 
         if ($count_time == 'min') {
