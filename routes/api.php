@@ -21,7 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Route::group(['middleware' => ['Cors']],function(){
-    Route::get('data', [data::class, 'list']);
+    Route::post('data', [data::class, 'list']);
 // });
 
 
