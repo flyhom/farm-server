@@ -20,4 +20,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('data', [data::class, 'list']);
+Route::middleware(['Cors'])->group(function () {
+    Route::get('data', [data::class, 'list']);
+});
+
+

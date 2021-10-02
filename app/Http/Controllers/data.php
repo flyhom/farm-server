@@ -17,7 +17,6 @@ class data extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     public function list(Request $request)
     {
-        $tableArr = ['atp','ec'];
         date_default_timezone_set('Asia/Taipei');
 
         $data = $request->all();
