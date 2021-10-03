@@ -25,13 +25,18 @@ class data extends BaseController
             return response()->json(['status' => 400, 'msg' => "沒有傳送任何資料", 'request' => $request, 'request_data' => $data, 'request_data_content' => $request->getContent()]);
         }
         $type = $data["type"];
+        if(isset($data["advanced"]))
+            $advanced = $data["advanced"];
+        else
+            $advanced = [];
         $start_time = $data["start_time"];
         $end_time = $data["end_time"];
         $count_time = $data["time"]; //min, hour, day
         if (!$start_time) $start_time = '2021-04-01 00:00:00';
         if (!$end_time) $end_time = '2021-05-01 00:00:00';
-
+        // dd($advanced);
         $tmp_arr = array();
+        $where = [];
         $where_column_arr=[];
         $select_arr = [];
         $table = '';
@@ -41,6 +46,14 @@ class data extends BaseController
         // $table = $tableArr[0]. ','. $tableArr[1];
         if (count($type) < 1) {
             return response()->json(['status' => 400, 'msg' => "請選擇適用的sensor"]);
+        }
+
+        if (count($advanced) > 0) {
+            for ($i=0; $i < count($advanced); $i++) {
+                if (in_array($advanced[$i]['sensor'],$type)) {
+                    array_push($where, [$advanced[$i]['sensor'].'.value',$advanced[$i]['operation'], $advanced[$i]['value']]);
+                }
+            }
         }
 
         if ($count_time == 'min') {
@@ -103,6 +116,7 @@ class data extends BaseController
 
         $query = DB::table(DB::raw($table))
         ->whereBetween($type[0].'.time' ,[$start_time, $end_time])
+        ->where($where)
         ->whereColumn($where_column_arr)
         ->select($select_arr)
         ->groupBy($groupby)
@@ -115,6 +129,9 @@ class data extends BaseController
         // $data = DB::select($log[0]['query'], [$log[0]['bindings'][0], $log[0]['bindings'][1]]);
         // dd(DB::getQueryLog());
         // echo $data;
+        if (!$query) {
+            return response()->json(['status' => 200, 'msg' => "查無紀錄", 'log' => $log, 'datas' => $query]);
+        }
         return response()->json(['status' => 200, 'msg' => "success", 'log' => $log, 'datas' => $query]);
     }
 
@@ -128,6 +145,10 @@ class data extends BaseController
             return response()->json(['status' => 400, 'msg' => "沒有傳送任何資料", 'request' => $request, 'request_data' => $data, 'request_data_content' => $request->getContent()]);
         }
         $type = $data["type"];
+        if(isset($data["advanced"]))
+            $advanced = $data["advanced"];
+        else
+            $advanced = [];
         $start_time = $data["start_time"];
         $end_time = $data["end_time"];
         $count_time = $data["time"]; //min, hour, day
@@ -135,6 +156,7 @@ class data extends BaseController
         if (!$end_time) $end_time = '2021-05-01 00:00:00';
 
         $tmp_arr = array();
+        $where = [];
         $where_column_arr=[];
         $select_arr = [];
         $select_concat_arr = [];
@@ -145,6 +167,14 @@ class data extends BaseController
         // $table = $tableArr[0]. ','. $tableArr[1];
         if (count($type) < 1) {
             return response()->json(['status' => 400, 'msg' => "請選擇適用的sensor"]);
+        }
+
+        if (count($advanced) > 0) {
+            for ($i=0; $i < count($advanced); $i++) {
+                if (in_array($advanced[$i]['sensor'],$type)) {
+                    array_push($where, [$advanced[$i]['sensor'].'.value',$advanced[$i]['operation'], $advanced[$i]['value']]);
+                }
+            }
         }
 
         if ($count_time == 'min') {
@@ -214,6 +244,7 @@ class data extends BaseController
         $query = DB::table(DB::raw($table))
         ->whereBetween($type[0].'.time' ,[$start_time, $end_time])
         ->whereColumn($where_column_arr)
+        ->where($where)
         ->select($select_arr)
         ->groupBy($groupby)
         ->orderBy($groupby);
@@ -232,7 +263,9 @@ class data extends BaseController
 
         $query3 = DB::select($query2, $getBindings);
         $log = DB::getQueryLog();
-
+        if (!$query3) {
+            return response()->json(['status' => 200, 'msg' => "查無紀錄", 'log' => $log, 'datas' => $query3]);
+        }
         if ($query3[0]->time) $query3[0]->time = json_decode($query3[0]->time, true);
         for ($i=0; $i < count($type); $i++) {
             $string = (string)($type[$i]);
