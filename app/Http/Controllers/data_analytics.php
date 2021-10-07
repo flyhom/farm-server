@@ -351,54 +351,26 @@ class data_analytics extends BaseController
         }
         $corr = array();
         $tmp_arr = array();
-        // for ($i=0; $i < count($sensor_arr); $i++) {
-        //     if ($i == 0) {
-        //         array_push($tmp_arr, ["header" => '欄位名稱/相似值']);
-        //     }
-        //     array_push($tmp_arr, ["header" => $sensor_arr[$i]]);
-        // }
-        // array_push($corr, $tmp_arr);
         for ($i=0; $i < count($sensor_arr); $i++) {
             $tmp_arr = array();
             for ($j=0; $j < count($sensor_arr); $j++) {
                 if ($j == 0) {
-                    array_push($tmp_arr, ["header" => $sensor_arr[$i]]);
+                    $tmp_arr = array_merge($tmp_arr, ["header" => $sensor_arr[$i]]);
                 }
                 if ($sensor_arr[$i] == $sensor_arr[$j]) {
-                    array_push($tmp_arr, ["sensor1" => $sensor_arr[$i], "sensor2" => $sensor_arr[$j], "value" => 2]);
+                    $tmp_arr = array_merge($tmp_arr, [$sensor_arr[$j] => 2]);
                 }else{
                     $ans = $this->corr_sql($count_time, $sensor_arr[$i], $sensor_arr[$j], $start_time, $end_time);
-                    // dd($ans);
-                    array_push($tmp_arr, ["sensor1" => $sensor_arr[$i], "sensor2" => $sensor_arr[$j], "value" => $ans]);
+                    $tmp_arr = array_merge($tmp_arr, [$sensor_arr[$j] => $ans]);
                 }
             }
             array_push($corr, $tmp_arr);
         }
 
-
+        // dd($corr);
         if (!$corr) {
             return response()->json(['status' => 200, 'msg' => "查無紀錄", 'datas' => $corr]);
         }
-        $n_corr = array();
-        $tmp_arr = [];
-        for ($i=0; $i < count($corr); $i++) {
-            $tmp_arr = [];
-            for ($j=0; $j < count($corr[$i]); $j++) {
-                if ($j == 0) {
-                    // array_push($tmp_arr, ["header" => $corr[$i][$j]["header"]]);
-                    $tmp_arr = array_merge($tmp_arr, ["header" => $corr[$i][$j]["header"]]);
-                }else{
-                    $tmp_arr = array_merge($tmp_arr, [$corr[$i][$j]["sensor2"] => $corr[$i][$j]["value"]]);
-                }
-            }
-            array_push($n_corr, $tmp_arr);
-        }
-
-        // dd($n_corr);
-        // $log[1]['bindings'][0] = '`'. str_replace('.','`.`',$log[0]['bindings'][1]) . '`';
-        // $data = DB::select($log[0]['query'], [$log[0]['bindings'][0], $log[0]['bindings'][1]]);
-        // dd(DB::getQueryLog());
-        // echo $data;
-        return response()->json(['status' => 200, 'msg' => "success", 'datas' => $n_corr]);
+        return response()->json(['status' => 200, 'msg' => "success", 'datas' => $corr]);
     }
 }
