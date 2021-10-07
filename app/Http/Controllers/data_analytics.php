@@ -355,11 +355,11 @@ class data_analytics extends BaseController
             $tmp_arr = array();
             for ($j=0; $j < count($sensor_arr); $j++) {
                 if ($sensor_arr[$i] == $sensor_arr[$j]) {
-                    array_push($tmp_arr, [$sensor_arr[$i], $sensor_arr[$j], 2]);
+                    array_push($tmp_arr, ["sensor1" => $sensor_arr[$i], "sensor2" => $sensor_arr[$j], "value" => 2]);
                 }else{
                     $ans = $this->corr_sql($count_time, $sensor_arr[$i], $sensor_arr[$j], $start_time, $end_time);
                     // dd($ans);
-                    array_push($tmp_arr, [$sensor_arr[$i], $sensor_arr[$j], $ans]);
+                    array_push($tmp_arr, ["sensor1" => $sensor_arr[$i], "sensor2" => $sensor_arr[$j], "value" => $ans]);
                 }
             }
             array_push($corr, $tmp_arr);
