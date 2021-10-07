@@ -351,18 +351,26 @@ class data_analytics extends BaseController
         }
         $corr = array();
         $tmp_arr = array();
+        $data_add = 0;
+        $count = 0;
         for ($i=0; $i < count($sensor_arr); $i++) {
             $tmp_arr = array();
+            $count = 0;
             for ($j=0; $j < count($sensor_arr); $j++) {
                 if ($j == 0) {
                     $tmp_arr = array_merge($tmp_arr, ["header" => $sensor_arr[$i]]);
                 }
-                if ($sensor_arr[$i] == $sensor_arr[$j]) {
-                    $tmp_arr = array_merge($tmp_arr, [$sensor_arr[$j] => 2]);
+                if ($i > $j) {
+                    $ans = (double)($corr[$j][$sensor_arr[$i]]);
+                    $tmp_arr = array_merge($tmp_arr, [$sensor_arr[$j] => $ans ]);
+                }else if($sensor_arr[$i] == $sensor_arr[$j]){
+                    $tmp_arr = array_merge($tmp_arr, [$sensor_arr[$j] => '相同欄位']);
                 }else{
                     $ans = $this->corr_sql($count_time, $sensor_arr[$i], $sensor_arr[$j], $start_time, $end_time);
                     $tmp_arr = array_merge($tmp_arr, [$sensor_arr[$j] => $ans]);
                 }
+                $data_add += 1;
+                $count += 1;
             }
             array_push($corr, $tmp_arr);
         }
