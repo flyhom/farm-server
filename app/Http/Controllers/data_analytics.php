@@ -352,8 +352,18 @@ class data_analytics extends BaseController
         $corr = array();
         $tmp_arr = array();
         for ($i=0; $i < count($sensor_arr); $i++) {
+            if ($i == 0) {
+                array_push($tmp_arr, ["header" => '欄位名稱/相似值']);
+            }
+            array_push($tmp_arr, ["header" => $sensor_arr[$i]]);
+        }
+        array_push($corr, $tmp_arr);
+        for ($i=0; $i < count($sensor_arr); $i++) {
             $tmp_arr = array();
             for ($j=0; $j < count($sensor_arr); $j++) {
+                if ($j == 0) {
+                    array_push($tmp_arr, ["header" => $sensor_arr[$i]]);
+                }
                 if ($sensor_arr[$i] == $sensor_arr[$j]) {
                     array_push($tmp_arr, ["sensor1" => $sensor_arr[$i], "sensor2" => $sensor_arr[$j], "value" => 2]);
                 }else{
