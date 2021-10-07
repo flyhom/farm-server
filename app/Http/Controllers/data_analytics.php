@@ -380,16 +380,14 @@ class data_analytics extends BaseController
             return response()->json(['status' => 200, 'msg' => "查無紀錄", 'datas' => $corr]);
         }
         $n_corr = array();
-        $tmp_arr = array();
-        // dd($corr);
+        $tmp_arr = [];
         for ($i=0; $i < count($corr); $i++) {
-            $tmp_arr = array();
-            for ($j=0; $j < count($corr); $j++) {
+            $tmp_arr = [];
+            for ($j=0; $j < count($corr[$i]); $j++) {
                 if ($j == 0) {
                     // array_push($tmp_arr, ["header" => $corr[$i][$j]["header"]]);
                     $tmp_arr = array_merge($tmp_arr, ["header" => $corr[$i][$j]["header"]]);
                 }else{
-                    // array_push($tmp_arr, [$corr[$i][$j]["sensor2"] => $corr[$i][$j]["value"]]);
                     $tmp_arr = array_merge($tmp_arr, [$corr[$i][$j]["sensor2"] => $corr[$i][$j]["value"]]);
                 }
             }
