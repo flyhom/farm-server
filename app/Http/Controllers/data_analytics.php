@@ -335,7 +335,8 @@ class data_analytics extends BaseController
     public function correlation(Request $request)
     {
         date_default_timezone_set('Asia/Taipei');
-        $sensor_arr = ['atp', 'ec', 'humidity', 'luminance', 'ph', 'soil_humid', 'soil_temp', 'temp', 'uv'];
+        // $sensor_arr = ['atp', 'ec', 'humidity', 'luminance', 'ph', 'soil_humid', 'soil_temp', 'temp', 'uv'];
+        $sensor_arr = ['luminance', 'temp', 'humidity', 'soil_temp', 'soil_humid', 'ec', 'ph', 'atp', 'uv'];
         $data = $request->all();
 
         if (!$data) {
@@ -351,11 +352,8 @@ class data_analytics extends BaseController
         }
         $corr = array();
         $tmp_arr = array();
-        $data_add = 0;
-        $count = 0;
         for ($i=0; $i < count($sensor_arr); $i++) {
             $tmp_arr = array();
-            $count = 0;
             for ($j=0; $j < count($sensor_arr); $j++) {
                 if ($j == 0) {
                     $tmp_arr = array_merge($tmp_arr, ["header" => $sensor_arr[$i]]);
@@ -364,13 +362,11 @@ class data_analytics extends BaseController
                     $ans = (double)($corr[$j][$sensor_arr[$i]]);
                     $tmp_arr = array_merge($tmp_arr, [$sensor_arr[$j] => $ans ]);
                 }else if($sensor_arr[$i] == $sensor_arr[$j]){
-                    $tmp_arr = array_merge($tmp_arr, [$sensor_arr[$j] => '相同欄位']);
+                    $tmp_arr = array_merge($tmp_arr, [$sensor_arr[$j] => '-']);
                 }else{
                     $ans = $this->corr_sql($count_time, $sensor_arr[$i], $sensor_arr[$j], $start_time, $end_time);
                     $tmp_arr = array_merge($tmp_arr, [$sensor_arr[$j] => $ans]);
                 }
-                $data_add += 1;
-                $count += 1;
             }
             array_push($corr, $tmp_arr);
         }
