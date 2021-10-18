@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Routing\Controller as BaseController;
 use \DB;
 
@@ -25,10 +23,10 @@ class update_data extends BaseController
             return response()->json(['status' => 400, 'msg' => "沒有傳送任何資料", 'request' => $request, 'request_data' => $data, 'request_data_content' => $request->getContent()]);
         }
         $type = $data["type"];
+        $originalFile = $request->file('file');
         $fileOriginalName = $request->file->getClientOriginalName();
-        $filename = $request->file->storeAs('data', $fileOriginalName);
-        // $originalFile = $request->file('file');
-        $rows= explode(PHP_EOL, \Storage::get($fileOriginalName));
+        $filename = $request->file->store('upload');
+        $rows= explode(PHP_EOL, Storage::get($filename));
         dd($rows);
         foreach ($rows as $row)
         {
