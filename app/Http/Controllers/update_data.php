@@ -77,7 +77,7 @@ class update_data extends BaseController
         Storage::delete($filepath);
 
         if (strlen($error) > 0) {
-            return response()->json(['status' => 400, 'msg' => $error]);
+            return response()->json(['status' => 400, 'msg' => '第 '.$error.' 筆資料更新錯誤，請檢查後重新上傳']);
         }
         return response()->json(['status' => 200, 'msg' => "success"]);
     }
