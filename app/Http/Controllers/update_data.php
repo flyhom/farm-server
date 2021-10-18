@@ -46,13 +46,11 @@ class update_data extends BaseController
         if ($arr[0][0] == 'datetime') {
             array_shift($arr);
         }
-        foreach($arr as $data){
-            $model = $type::updateOrCreate(
-                ['time' => $data[0]],
-                ['value' => $data[1]]
-            );
-            dd($model);
-        }
+        $sql = 'INSERT INTO '. $type .' (time, value) VALUES ? ON DUPLICATE KEY UPDATE value = VALUES(value)';
+        // foreach($arr as $data){
+        // }
+        $ans = DB::select($sql, $arr);
+        dd($sql,$ans);
         Storage::delete($filepath);
 
         return response()->json(['status' => 200, 'msg' => "success"]);
