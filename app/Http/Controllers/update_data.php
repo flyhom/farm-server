@@ -62,7 +62,11 @@ class update_data extends BaseController
 
         // 資料新增
         foreach($arr as $data){
-            $ans = DB::statement($sql, [$data[0], $data[1]]);
+            if (isset($data[0]) && isset($data[1])) {
+                $ans = DB::statement($sql, [$data[0], $data[1]]);
+            }else{
+                dd($data[0]);
+            }
         }
         // dd($sql,$ans);
 
