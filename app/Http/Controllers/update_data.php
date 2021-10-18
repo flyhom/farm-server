@@ -27,10 +27,15 @@ class update_data extends BaseController
         }
         $type = $data["type"];
         $originalFile = $request->file('file');
+
+        $path = base_path(). '/storge/app/upload/';
         $fileOriginalName = $request->file->getClientOriginalName();
-        dd($data);
-        $filepath = $request->file->storeAs('upload', $fileOriginalName);
-        $rows= explode(PHP_EOL, Storage::get($filepath));
+        $filename = str_random(10). '.' . $originalFile->getClientOriginalExtension();
+
+        $file->move($path,$filename);
+        // $filepath = $request->file->storeAs('upload', $fileOriginalName);
+        $rows= explode(PHP_EOL, Storage::get($path . $filename));
+        dd($rows);
         foreach ($rows as $row)
         {
             $record = str_getcsv($row);
