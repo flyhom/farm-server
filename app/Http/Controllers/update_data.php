@@ -30,7 +30,7 @@ class update_data extends BaseController
         }
         $type = $data["type"];
         $originalFile = $request->file('file');
-
+        dd(ini_get('upload_tmp_dir') , ini_get('upload_tmp_dir') , sys_get_temp_dir());
         $path = base_path(). '/storge/app/upload/';
         $fileOriginalName = $request->file->getClientOriginalName();
         $filename = $current_timestamp . '.' . $originalFile->getClientOriginalExtension();
