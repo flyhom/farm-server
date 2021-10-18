@@ -20,6 +20,7 @@ class update_data extends BaseController
         date_default_timezone_set('Asia/Taipei');
         ini_set('memory_limit', -1);
         ini_set('upload_max_size', '512M');
+        ini_set('upload_max_filesize', '512M');
         ini_set('post_max_size', '512M');
         $current_timestamp = Carbon::now()->timestamp;
         $sensor_arr = ['luminance', 'temp', 'humidity', 'soil_temp', 'soil_humid', 'ec', 'ph', 'atp', 'uv', 'rainfall'];
