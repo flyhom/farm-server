@@ -30,24 +30,18 @@ class update_data extends BaseController
         }
         $type = $data["type"];
         $originalFile = $request->file('file');
-        // $tmp_dir = ini_get('upload_tmp_dir') ? ini_get('upload_tmp_dir') : sys_get_temp_dir();
-        // dd($tmp_dir,$data['file']);
-        // $path = base_path(). '/storge/app/upload/';
 
         $fileOriginalName = $request->file->getClientOriginalName();
-        // $filename = $current_timestamp . '.' . $originalFile->getClientOriginalExtension();
 
-        // $data['file']->move($path, $filename);
         $filepath = $request->file->storeAs('upload', $fileOriginalName);
         $rows= explode(PHP_EOL, Storage::get($filepath));
-        dd($rows);
+        dd($filepath,$rows);
         foreach ($rows as $row)
         {
             $record = str_getcsv($row);
         }
-        foreach ($reader as $row) {
-            // Parsing the rows...
-        }
+
+        Storage::delete($filepath);
 
         return response()->json(['status' => 200, 'msg' => "success"]);
     }
