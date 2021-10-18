@@ -28,8 +28,8 @@ class update_data extends BaseController
         $type = $data["type"];
         $originalFile = $request->file('file');
         $fileOriginalName = $request->file->getClientOriginalName();
-        $filepath = $request->file->storeAs('upload', $fileOriginalName);
         dd($data);
+        $filepath = $request->file->storeAs('upload', $fileOriginalName);
         $rows= explode(PHP_EOL, Storage::get($filepath));
         foreach ($rows as $row)
         {
