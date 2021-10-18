@@ -65,7 +65,7 @@ class update_data extends BaseController
             if (isset($data[0]) && isset($data[1])) {
                 $ans = DB::statement($sql, [$data[0], $data[1]]);
             }else{
-                dd($i,$data[0]);
+                dd($i,$data);
             }
             $i++;
         }
