@@ -59,14 +59,15 @@ class update_data extends BaseController
         }elseif ($mode == 'replace') {
             $sql = 'INSERT INTO '. $type .' (time, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value = VALUES(value)';
         }
-
+        $i = 0;
         // 資料新增
         foreach($arr as $data){
             if (isset($data[0]) && isset($data[1])) {
                 $ans = DB::statement($sql, [$data[0], $data[1]]);
             }else{
-                dd($data[0]);
+                dd($i,$data[0]);
             }
+            $i++;
         }
         // dd($sql,$ans);
 
