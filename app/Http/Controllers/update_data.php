@@ -49,7 +49,7 @@ class update_data extends BaseController
         $sql = 'INSERT INTO '. $type .' (time, value) VALUES ? ON DUPLICATE KEY UPDATE value = VALUES(value)';
         // foreach($arr as $data){
         // }
-        $ans = DB::select($sql, $arr);
+        $ans = DB::statment($sql, $arr);
         dd($sql,$ans);
         Storage::delete($filepath);
 
