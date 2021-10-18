@@ -46,7 +46,7 @@ class update_data extends BaseController
         if ($arr[0][0] == 'datetime') {
             array_shift($arr);
         }
-        $sql = 'INSERT INTO '. $type .' (time, value) VALUES ? ON DUPLICATE KEY UPDATE value = VALUES(value)';
+        $sql = 'INSERT INTO '. $type .' (time, value) VALUES (?,?) ON DUPLICATE KEY UPDATE value = VALUES(value)';
         // foreach($arr as $data){
         // }
         $ans = DB::statment($sql, $arr);
