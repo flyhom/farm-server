@@ -35,12 +35,15 @@ class update_data extends BaseController
 
         $filepath = $request->file->storeAs('upload', $fileOriginalName);
         $rows= explode(PHP_EOL, Storage::get($filepath));
-
+        $arr = array();
         foreach ($rows as $row)
         {
             $record = str_getcsv($row);
-            dd($record);
+            if ($record[1] != 'value') {
+                array_push($arr, $record);
+            }
         }
+        dd($arr);
 
         Storage::delete($filepath);
 
