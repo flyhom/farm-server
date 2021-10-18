@@ -60,12 +60,14 @@ class update_data extends BaseController
             $sql = 'INSERT INTO '. $type .' (time, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value = VALUES(value)';
         }
         $i = 0;
+        $error = '';
         // 資料新增
         foreach($arr as $data){
             if (isset($data[0]) && isset($data[1])) {
                 $ans = DB::statement($sql, [$data[0], $data[1]]);
             }else{
-                dd($i,$data);
+                // dd($i,$data);
+                $error = $error . (string)($i);
             }
             $i++;
         }
@@ -74,6 +76,9 @@ class update_data extends BaseController
         // 上傳檔案刪除
         Storage::delete($filepath);
 
+        if (strlen($error) > 0) {
+            return response()->json(['status' => 400, 'msg' => $error]);
+        }
         return response()->json(['status' => 200, 'msg' => "success"]);
     }
 }
