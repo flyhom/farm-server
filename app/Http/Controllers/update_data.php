@@ -41,12 +41,18 @@ class update_data extends BaseController
         {
             $record = str_getcsv($row);
             array_push($arr, ['time' => $record[0], 'value'=> $record[1]]);
+            array_push($arr, $record);
         }
-        if ($arr[0]['time'] == 'datetime') {
+        if ($arr[0][0] == 'datetime') {
             array_shift($arr);
         }
-        dd($arr);
-
+        foreach($arr as $data){
+            $model = DB::updateOrCreate(
+                ['time' => $data[0]],
+                ['value' => $data[1],]
+            );
+            dd($model);
+        }
         Storage::delete($filepath);
 
         return response()->json(['status' => 200, 'msg' => "success"]);
