@@ -39,6 +39,7 @@ class update_data extends BaseController
         foreach ($rows as $row)
         {
             $record = str_getcsv($row);
+            dd($record);
             if ($record[1] != 'value') {
                 array_push($arr, $record);
             }
