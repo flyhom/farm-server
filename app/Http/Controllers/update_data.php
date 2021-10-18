@@ -41,7 +41,7 @@ class update_data extends BaseController
             $record = str_getcsv($row);
             array_push($arr, $record);
         }
-        if ($arr[0][0] == 'arr') {
+        if ($arr[0][0] == 'datetime') {
             array_shift($arr);
         }
         dd($arr);
