@@ -28,7 +28,7 @@ class update_data extends BaseController
         $fileOriginalName = $request->file->getClientOriginalName();
         // $filename = $request->file->storeAs('data', $fileOriginalName);
         // $originalFile = $request->file('file');
-        $rows= explode(PHP_EOL, Storage::get($fileOriginalName));
+        $rows= explode(PHP_EOL, \Storage::get($fileOriginalName));
         dd($rows);
         foreach ($rows as $row)
         {
