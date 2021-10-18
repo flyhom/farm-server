@@ -37,7 +37,7 @@ class update_data extends BaseController
         $fileOriginalName = $request->file->getClientOriginalName();
         // $filename = $current_timestamp . '.' . $originalFile->getClientOriginalExtension();
 
-        $data['file']->move($path, $filename);
+        // $data['file']->move($path, $filename);
         $filepath = $request->file->storeAs('upload', $fileOriginalName);
         $rows= explode(PHP_EOL, Storage::get($filepath));
         dd($rows);
