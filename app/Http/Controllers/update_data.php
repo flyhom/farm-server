@@ -41,7 +41,6 @@ class update_data extends BaseController
             $record = str_getcsv($row);
             $time = $record[0];
             $value = $record[1];
-            dd($time, $value);
             if ($value != 'value') {
                 array_push($arr, $record);
             }
