@@ -47,7 +47,7 @@ class update_data extends BaseController
             array_shift($arr);
         }
         foreach($arr as $data){
-            $model = DB::updateOrCreate(
+            $model = $type::updateOrCreate(
                 ['time' => $data[0]],
                 ['value' => $data[1]]
             );
