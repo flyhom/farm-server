@@ -9,6 +9,8 @@ use Illuminate\Routing\Controller as BaseController;
 use \DB;
 
 use Event;
+use Carbon\Carbon;
+
 
 class update_data extends BaseController
 {
@@ -19,6 +21,7 @@ class update_data extends BaseController
         ini_set('memory_limit', -1);
         ini_set('upload_max_size', '512M');
         ini_set('post_max_size', '512M');
+        $current_timestamp = Carbon::now()->timestamp;
         $sensor_arr = ['luminance', 'temp', 'humidity', 'soil_temp', 'soil_humid', 'ec', 'ph', 'atp', 'uv', 'rainfall'];
         $data = $request->all();
 
@@ -30,7 +33,7 @@ class update_data extends BaseController
 
         $path = base_path(). '/storge/app/upload/';
         $fileOriginalName = $request->file->getClientOriginalName();
-        $filename = str_random(10). '.' . $originalFile->getClientOriginalExtension();
+        $filename = $current_timestamp . '.' . $originalFile->getClientOriginalExtension();
 
         $file->move($path,$filename);
         // $filepath = $request->file->storeAs('upload', $fileOriginalName);
