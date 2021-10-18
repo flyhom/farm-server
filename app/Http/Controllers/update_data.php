@@ -76,6 +76,8 @@ class update_data extends BaseController
         // 上傳檔案刪除
         Storage::delete($filepath);
 
+        DB::statement('OPTIMIZE TABLE ' . $type);
+
         if (strlen($error) > 0) {
             return response()->json(['status' => 400, 'msg' => '第 '.$error.' 筆資料更新錯誤，請檢查後重新上傳']);
         }
