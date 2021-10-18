@@ -35,13 +35,14 @@ class update_data extends BaseController
 
         $filepath = $request->file->storeAs('upload', $fileOriginalName);
         $rows= explode(PHP_EOL, Storage::get($filepath));
+        // 資料轉array
         $arr = array();
         foreach ($rows as $row)
         {
             $record = str_getcsv($row);
-            array_push($arr, $record);
+            array_push($arr, ['time' => $record[0], 'value'=> $record[1]]);
         }
-        if ($arr[0][0] == 'datetime') {
+        if ($arr[0]['time'] == 'datetime') {
             array_shift($arr);
         }
         dd($arr);
