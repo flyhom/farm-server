@@ -30,12 +30,17 @@ class update_data extends BaseController
         }
         $type = $data["type"];
         $mode = $data["mode"];
+        if (!in_array($type, $sensor_arr)) {
+            return response()->json(['status' => 400, 'msg' => "目前不支援此感應器的更新，請選擇其他感應器"]);
+        }
+        // 檔案上傳處理
         $originalFile = $request->file('file');
-
         $fileOriginalName = $request->file->getClientOriginalName();
-
         $filepath = $request->file->storeAs('upload', $fileOriginalName);
+
+        // 讀取檔案
         $rows= explode(PHP_EOL, Storage::get($filepath));
+
         // 資料轉array
         $arr = array();
         foreach ($rows as $row)
@@ -47,15 +52,21 @@ class update_data extends BaseController
         if ($arr[0][0] == 'datetime') {
             array_shift($arr);
         }
+
+        // 選擇SQL的執行模式
         if ($mode == 'ignore') {
             $sql = 'INSERT IGNORE INTO '. $type .' (time, value) VALUES (?, ?)';
         }elseif ($mode == 'replace') {
             $sql = 'INSERT INTO '. $type .' (time, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value = VALUES(value)';
         }
+
+        // 資料新增
         foreach($arr as $data){
             $ans = DB::statement($sql, [$data[0], $data[1]]);
         }
-        dd($sql,$ans);
+        // dd($sql,$ans);
+
+        // 上傳檔案刪除
         Storage::delete($filepath);
 
         return response()->json(['status' => 200, 'msg' => "success"]);
