@@ -19,7 +19,6 @@ class update_data extends BaseController
     {
         date_default_timezone_set('Asia/Taipei');
         ini_set('memory_limit', -1);
-        ini_set('upload_max_size', '512M');
         ini_set('upload_max_filesize', '512M');
         ini_set('post_max_size', '512M');
         $current_timestamp = Carbon::now()->timestamp;
@@ -36,7 +35,7 @@ class update_data extends BaseController
         $fileOriginalName = $request->file->getClientOriginalName();
         $filename = $current_timestamp . '.' . $originalFile->getClientOriginalExtension();
 
-        $request->file->move($path,$filename);
+        $data['file']->move($path, $filename);
         // $filepath = $request->file->storeAs('upload', $fileOriginalName);
         $rows= explode(PHP_EOL, Storage::get($path . $filename));
         dd($rows);
