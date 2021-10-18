@@ -29,6 +29,7 @@ class update_data extends BaseController
             return response()->json(['status' => 400, 'msg' => "沒有傳送任何資料", 'request' => $request, 'request_data' => $data, 'request_data_content' => $request->getContent()]);
         }
         $type = $data["type"];
+        $mode = $data["mode"];
         $originalFile = $request->file('file');
 
         $fileOriginalName = $request->file->getClientOriginalName();
@@ -46,7 +47,11 @@ class update_data extends BaseController
         if ($arr[0][0] == 'datetime') {
             array_shift($arr);
         }
-        $sql = 'INSERT INTO '. $type .' (time, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value = VALUES(value)';
+        if ($mode == 'ignore') {
+            $sql = 'INSERT IGNORE INTO '. $type .' (time, value) VALUES (?, ?)';
+        }elseif ($mode == 'replace') {
+            $sql = 'INSERT INTO '. $type .' (time, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value = VALUES(value)';
+        }
         foreach($arr as $data){
             $ans = DB::statement($sql, [$data[0], $data[1]]);
         }
