@@ -16,6 +16,9 @@ class update_data extends BaseController
     public function update(Request $request)
     {
         date_default_timezone_set('Asia/Taipei');
+        ini_set('memory_limit', -1);
+        ini_set('upload_max_size', '512M');
+        ini_set('post_max_size', '512M');
         $sensor_arr = ['luminance', 'temp', 'humidity', 'soil_temp', 'soil_humid', 'ec', 'ph', 'atp', 'uv', 'rainfall'];
         $data = $request->all();
 
@@ -26,8 +29,8 @@ class update_data extends BaseController
         $originalFile = $request->file('file');
         $fileOriginalName = $request->file->getClientOriginalName();
         $filepath = $request->file->storeAs('upload', $fileOriginalName);
+        dd($data);
         $rows= explode(PHP_EOL, Storage::get($filepath));
-        dd($rows);
         foreach ($rows as $row)
         {
             $record = str_getcsv($row);
