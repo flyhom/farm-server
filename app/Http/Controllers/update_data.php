@@ -21,7 +21,8 @@ class update_data extends BaseController
         ini_set('memory_limit', -1);
         ini_set('upload_max_filesize', '512M');
         ini_set('post_max_size', '512M');
-        $current_timestamp = Carbon::now()->timestamp;
+        // $start_time = Carbon::now()->timestamp;
+        $start_time = Carbon::now();
         $sensor_arr = ['luminance', 'temp', 'humidity', 'soil_temp', 'soil_humid', 'ec', 'ph', 'atp', 'uv', 'rainfall'];
         $data = $request->all();
 
@@ -77,10 +78,10 @@ class update_data extends BaseController
         Storage::delete($filepath);
 
         DB::statement('OPTIMIZE TABLE ' . $type);
-
+        $duration = Carbon::now()->diffInSeconds($start_time);
         if (strlen($error) > 0) {
             return response()->json(['status' => 400, 'msg' => '第 '.$error.' 筆資料更新錯誤，請檢查後重新上傳']);
         }
-        return response()->json(['status' => 200, 'msg' => "success"]);
+        return response()->json(['status' => 200, 'msg' => "success",'start' => $i - 1 , 'duration' => $duration]);
     }
 }
