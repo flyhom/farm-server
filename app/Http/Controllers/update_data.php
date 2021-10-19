@@ -80,8 +80,8 @@ class update_data extends BaseController
         DB::statement('OPTIMIZE TABLE ' . $type);
         $duration = Carbon::now()->diffInSeconds($start_time);
         if (strlen($error) > 0) {
-            return response()->json(['status' => 400, 'msg' => '第 '.$error.' 筆資料更新錯誤，請檢查後重新上傳', 'end' => $i - 1 , 'duration' => $duration]);
+            return response()->json(['status' => 400, 'msg' => '第 '.$error.' 筆資料更新錯誤，請檢查後重新上傳', 'max' => count($arr) ,'end' => $i - 1 , 'duration' => $duration]);
         }
-        return response()->json(['status' => 200, 'msg' => "success", 'end' => $i - 1 , 'duration' => $duration]);
+        return response()->json(['status' => 200, 'msg' => "success",'max' => count($arr) , 'end' => $i - 1 , 'duration' => $duration]);
     }
 }
