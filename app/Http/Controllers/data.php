@@ -85,7 +85,11 @@ class data extends BaseController
                     $table = $table. ', '. $type[$i];
                     array_push($where_column_arr, [$type[($i-1)].'.time', $type[$i].'.time']);
                 }
-                array_push($select_arr, DB::raw('round(AVG('. $type[$i].'.value), 2) as '.$type[$i]));
+                if ($type[$i] != 'rainfall') {
+                    array_push($select_arr, DB::raw('round(AVG('. $type[$i].'.value), 2) as '.$type[$i]));
+                }else {
+                    array_push($select_arr, DB::raw('round(SUM('. $type[$i].'.value), 2) as '.$type[$i]));
+                }
             }
 
         }elseif ($count_time == 'day') {
@@ -101,7 +105,11 @@ class data extends BaseController
                     $table = $table. ', '. $type[$i];
                     array_push($where_column_arr, [$type[($i-1)].'.time', $type[$i].'.time']);
                 }
-                array_push($select_arr, DB::raw('round(AVG('. $type[$i].'.value), 2) as '.$type[$i]));
+                if ($type[$i] != 'rainfall') {
+                    array_push($select_arr, DB::raw('round(AVG('. $type[$i].'.value), 2) as '.$type[$i]));
+                }else {
+                    array_push($select_arr, DB::raw('round(SUM('. $type[$i].'.value), 2) as '.$type[$i]));
+                }
             }
 
         }
