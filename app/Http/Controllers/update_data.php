@@ -73,6 +73,7 @@ class update_data extends BaseController
             }else {
                for ($i=0; $i < count($record); $i++) {
                    if ($i != 0) {
+                       dd($rain_y_m,$record,$i);
                        $raindatetime = $rain_y_m[0] . ':' . $rain_y_m[1] . ':' . $record[0] . ' ' . $i-1 . ':00:00';
                        array_push($arr, [$raindatetime, $record[$i]]);
                    }
