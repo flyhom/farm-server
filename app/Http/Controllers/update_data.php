@@ -34,11 +34,10 @@ class update_data extends BaseController
         $type = '';
         $rain_y_m;
         $mode = $data["mode"];
-        // if (!in_array($type, $sensor_arr)) {
-        //     return response()->json(['status' => 400, 'msg' => "目前不支援此感應器的更新，請選擇其他感應器"]);
-        // }
+
         // 檔案上傳處理
-        $originalFile = $request->file('file');
+        $originalFile = $data['file'];
+        dd($originalFile,$originalFile->getClientOriginalName());
         $fileOriginalName = $originalFile->getClientOriginalName();
         $filename = pathinfo($fileOriginalName, PATHINFO_FILENAME);
         $extension = pathinfo($fileOriginalName, PATHINFO_EXTENSION);
