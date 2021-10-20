@@ -37,7 +37,7 @@ class update_data extends BaseController
 
         // 檔案上傳處理
         $originalFile = $data['file'];
-        dd($originalFile,$originalFile->getClientOriginalName());
+        // dd($originalFile,$originalFile->getClientOriginalName());
         $fileOriginalName = $originalFile->getClientOriginalName();
         $filename = pathinfo($fileOriginalName, PATHINFO_FILENAME);
         $extension = pathinfo($fileOriginalName, PATHINFO_EXTENSION);
