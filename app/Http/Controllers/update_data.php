@@ -32,6 +32,7 @@ class update_data extends BaseController
         }
         // $type = $data["type"];
         $type = '';
+        $rain_y_m;
         $mode = $data["mode"];
         // if (!in_array($type, $sensor_arr)) {
         //     return response()->json(['status' => 400, 'msg' => "目前不支援此感應器的更新，請選擇其他感應器"]);
@@ -62,6 +63,7 @@ class update_data extends BaseController
 
         // 資料轉array
         $arr = array();
+        $raindatetime = '';
         foreach ($rows as $row)
         {
             $record = str_getcsv($row);
@@ -71,7 +73,7 @@ class update_data extends BaseController
             }else {
                for ($i=0; $i < count($record); $i++) {
                    if ($i != 0) {
-                       $raindatetime = $rain_y_m[0] . ':' . $rain_y_m[0] . ':' . $record[0] . ' ' . $i-1 . ':00:00';
+                       $raindatetime = $rain_y_m[0] . ':' . $rain_y_m[1] . ':' . $record[0] . ' ' . $i-1 . ':00:00';
                        array_push($arr, [$raindatetime, $record[$i]]);
                    }
                }
