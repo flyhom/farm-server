@@ -30,7 +30,8 @@ class update_data extends BaseController
         if (!$data) {
             return response()->json(['status' => 400, 'msg' => "沒有傳送任何資料", 'request' => $request, 'request_data' => $data, 'request_data_content' => $request->getContent()]);
         }
-        $type = $data["type"];
+        // $type = $data["type"];
+        $type = '';
         $mode = $data["mode"];
         // if (!in_array($type, $sensor_arr)) {
         //     return response()->json(['status' => 400, 'msg' => "目前不支援此感應器的更新，請選擇其他感應器"]);
