@@ -23,7 +23,7 @@ class update_data extends BaseController
         ini_set('post_max_size', '512M');
         // $start_time = Carbon::now()->timestamp;
         $start_time = Carbon::now();
-        $sensor_arr = ['luminance', 'temp', 'humidity', 'soil_temp', 'soil_humid', 'ec', 'ph', 'atp', 'uv', 'rainfall'];
+        $sensor_arr = ['luminance', 'temp', 'humidity', 'soil_temp', 'soil_humid', 'ec', 'ph', 'atp', 'uv'];
         $file_arr = ['light', 'temp2', 'humidity2', 'soiltemp', 'soilhumidity', 'ec', 'ph', 'atp', 'uv'];
         $data = $request->all();
 
@@ -39,7 +39,7 @@ class update_data extends BaseController
         // }
         // 檔案上傳處理
         $originalFile = $request->file('file');
-        $fileOriginalName = $request->file->getClientOriginalName();
+        $fileOriginalName = $originalFile->getClientOriginalName();
         $filename = pathinfo($fileOriginalName, PATHINFO_FILENAME);
         $extension = pathinfo($fileOriginalName, PATHINFO_EXTENSION);
 
@@ -51,12 +51,12 @@ class update_data extends BaseController
             $type = 'rainfall';
             $rain_y_m = explode("_", $filename);
         }else {
-            $filepath = $request->file->storeAs('upload', $fileOriginalName);
+            $filepath = $originalFile->storeAs('upload', $fileOriginalName);
             Storage::delete($filepath);
             return response()->json(['status' => 400, 'msg' => "目前不支援此感應器的更新，請選擇其他感應器"]);
         }
 
-        $filepath = $request->file->storeAs('upload', $fileOriginalName);
+        $filepath = $originalFile->storeAs('upload', $fileOriginalName);
 
         // 讀取檔案
         $rows= explode(PHP_EOL, Storage::get($filepath));
@@ -95,7 +95,7 @@ class update_data extends BaseController
         // 資料新增
         foreach($arr as $data){
             if (isset($data[0]) && isset($data[1])) {
-                $ans = DB::statement($sql, [$data[0], $data[1]]);
+                DB::statement($sql, [$data[0], $data[1]]);
             }else{
                 // dd($i,$data);
                 $error = $error . (string)($i);
