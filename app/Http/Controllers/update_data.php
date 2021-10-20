@@ -24,6 +24,7 @@ class update_data extends BaseController
         // $start_time = Carbon::now()->timestamp;
         $start_time = Carbon::now();
         $sensor_arr = ['luminance', 'temp', 'humidity', 'soil_temp', 'soil_humid', 'ec', 'ph', 'atp', 'uv', 'rainfall'];
+        $file_arr = ['light', 'temp2', 'humidity2', 'soiltemp', 'soilhumidity', 'ec', 'ph', 'atp', 'uv'];
         $data = $request->all();
 
         if (!$data) {
@@ -31,12 +32,28 @@ class update_data extends BaseController
         }
         $type = $data["type"];
         $mode = $data["mode"];
-        if (!in_array($type, $sensor_arr)) {
-            return response()->json(['status' => 400, 'msg' => "目前不支援此感應器的更新，請選擇其他感應器"]);
-        }
+        // if (!in_array($type, $sensor_arr)) {
+        //     return response()->json(['status' => 400, 'msg' => "目前不支援此感應器的更新，請選擇其他感應器"]);
+        // }
         // 檔案上傳處理
         $originalFile = $request->file('file');
         $fileOriginalName = $request->file->getClientOriginalName();
+        $filename = pathinfo($fileOriginalName, PATHINFO_FILENAME);
+        $extension = pathinfo($fileOriginalName, PATHINFO_EXTENSION);
+
+        if (in_array($filename, $sensor_arr)) {
+            $type = $sensor_arr[array_search($filename, $sensor_arr)];
+        }elseif (in_array($filename, $file_arr)) {
+            $type = $sensor_arr[array_search($filename, $file_arr)];
+        }elseif (count(explode("_", $filename) == 2)) {
+            $type = 'rainfall';
+            $rain_y_m = explode("_", $filename);
+        }else {
+            $filepath = $request->file->storeAs('upload', $fileOriginalName);
+            Storage::delete($filepath);
+            return response()->json(['status' => 400, 'msg' => "目前不支援此感應器的更新，請選擇其他感應器"]);
+        }
+
         $filepath = $request->file->storeAs('upload', $fileOriginalName);
 
         // 讀取檔案
@@ -48,9 +65,18 @@ class update_data extends BaseController
         {
             $record = str_getcsv($row);
             // array_push($arr, ['time' => $record[0], 'value'=> $record[1]]);
-            array_push($arr, $record);
+            if ($type != 'rainfall') {
+                array_push($arr, $record);
+            }else {
+               for ($i=0; $i < count($record); $i++) {
+                   if ($i != 0) {
+                       $raindatetime = $rain_y_m[0] . ':' . $rain_y_m[0] . ':' . $record[0] . ' ' . $i-1 . ':00:00';
+                       array_push($arr, [$raindatetime, $record[$i]]);
+                   }
+               }
+            }
         }
-        if ($arr[0][0] == 'datetime') {
+        if ($arr[0][0] == 'datetime' && $type != 'rainfall') {
             array_shift($arr);
         }
 
