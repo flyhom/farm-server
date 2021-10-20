@@ -278,6 +278,7 @@ class data extends BaseController
             if ($string == 'soil_temp') $query3[0]->soil_temp = json_decode($query3[0]->soil_temp, true);
             if ($string == 'temp') $query3[0]->temp = json_decode($query3[0]->temp, true);
             if ($string == 'uv') $query3[0]->uv = json_decode($query3[0]->uv, true);
+            if ($string == 'rainfall') $query3[0]->rainfall = json_decode($query3[0]->rainfall, true);
         }
 
 
