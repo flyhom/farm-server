@@ -46,7 +46,7 @@ class update_data extends BaseController
             $type = $sensor_arr[array_search($filename, $sensor_arr)];
         }elseif (in_array($filename, $file_arr)) {
             $type = $sensor_arr[array_search($filename, $file_arr)];
-        }elseif (count(explode("_", $filename) == 2)) {
+        }elseif (count(explode("_", $filename)) == 2) {
             $type = 'rainfall';
             $rain_y_m = explode("_", $filename);
         }else {
