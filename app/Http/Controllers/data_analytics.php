@@ -102,6 +102,6 @@ class data_analytics extends BaseController
         if (!$corr) {
             return response()->json(['status' => 200, 'msg' => "查無紀錄", 'datas' => $corr]);
         }
-        return response()->json(['status' => 200, 'msg' => "success", 'datas' => $corr]);
+        return response()->json(['status' => 200, 'msg' => "成功", 'datas' => $corr]);
     }
 }

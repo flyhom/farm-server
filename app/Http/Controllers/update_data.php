@@ -111,6 +111,6 @@ class update_data extends BaseController
         if (strlen($error) > 0) {
             return response()->json(['status' => 400, 'msg' => '第 '.$error.' 筆資料更新錯誤，請檢查後重新上傳', 'max' => count($arr) ,'end' => $i - 1 , 'duration' => $duration]);
         }
-        return response()->json(['status' => 200, 'msg' => "success",'max' => count($arr) , 'end' => $i - 1 , 'duration' => $duration]);
+        return response()->json(['status' => 200, 'msg' => "成功",'max' => count($arr) , 'end' => $i - 1 , 'duration' => $duration]);
     }
 }

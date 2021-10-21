@@ -140,7 +140,7 @@ class data extends BaseController
         if (!$query) {
             return response()->json(['status' => 200, 'msg' => "查無紀錄", 'log' => $log, 'datas' => $query]);
         }
-        return response()->json(['status' => 200, 'msg' => "success", 'log' => $log, 'datas' => $query]);
+        return response()->json(['status' => 200, 'msg' => "成功", 'log' => $log, 'datas' => $query]);
     }
 
     public function chart(Request $request)
@@ -303,6 +303,6 @@ class data extends BaseController
         // $data = DB::select($log[0]['query'], [$log[0]['bindings'][0], $log[0]['bindings'][1]]);
         // dd(DB::getQueryLog());
         // echo $data;
-        return response()->json(['status' => 200, 'msg' => "success", 'log' => $log, 'datas' => $query3]);
+        return response()->json(['status' => 200, 'msg' => "成功", 'log' => $log, 'datas' => $query3]);
     }
 }
