@@ -96,7 +96,7 @@ class data_analytics extends BaseController
             // $sql = str_replace('?', '%s', $query->toSql());
             // $sql = sprintf($sql, ...$getBindings);
 
-            $query2 = DB::table(DB::raw($table .', ('. $sql. ') as tb'))
+            $query2 = DB::table(DB::raw('('. $tb1 .') as ' . $column1 .', (' . $tb2 .') as ' . $column2 .', ('. $sql. ') as tb'))
             ->select(DB::raw('round((sum( ( '. $column1. '.value - @a1 ) * ('. $column2. '.value - @b1) ) / ((count('. $column1. '.value) -1) * @c1)), 4) as p'))
             ->whereColumn($where_column_arr);
             $sql2 = $query2->toSql();
