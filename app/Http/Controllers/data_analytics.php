@@ -101,9 +101,9 @@ class data_analytics extends BaseController
             ->whereColumn($where_column_arr);
             $sql2 = $query2->toSql();
             $bindings = array_merge($getBindings, $getBindings);
-            $bindings = array_merge($bindings, $bindings);
-            $bindings = array_merge($bindings, $bindings);
-            $bindings = array_merge($bindings, $bindings);
+            $bindings = array_merge($bindings, $getBindings);
+            $bindings = array_merge($bindings, $getBindings);
+            $bindings = array_merge($bindings, $getBindings);
             dd($sql2,$bindings);
             // dd($query2,$getBindings);
             $query3 = DB::select($sql2, $bindings);
