@@ -154,7 +154,7 @@ class data_analytics extends BaseController
     {
         date_default_timezone_set('Asia/Taipei');
         // $sensor_arr = ['atp', 'ec', 'humidity', 'luminance', 'ph', 'soil_humid', 'soil_temp', 'temp', 'uv'];
-        $sensor_arr = ['luminance', 'temp', 'humidity', 'soil_temp', 'soil_humid', 'ec', 'ph', 'atp', 'uv'];
+        $sensor_arr = [];
         $data = $request->all();
 
         if (!$data) {
@@ -165,9 +165,11 @@ class data_analytics extends BaseController
         $count_time = $data["time"]; //min, hour, day
         if (!$start_time) $start_time = '2021-04-01 00:00:00';
         if (!$end_time) $end_time = '2021-05-01 00:00:00';
-        // if ($count_time != 'min') {
-        //     return response()->json(['status' => 400, 'msg' => "目前僅可查詢分的相似值"]);
-        // }
+        if ($count_time == 'min') {
+            $sensor_arr = ['luminance', 'temp', 'humidity', 'soil_temp', 'soil_humid', 'ec', 'ph', 'atp', 'uv'];
+        }else{
+            $sensor_arr = ['luminance', 'temp', 'humidity', 'soil_temp', 'soil_humid', 'ec', 'ph', 'atp', 'uv', 'rainfall'];
+        }
         $corr = array();
         $tmp_arr = array();
         for ($i=0; $i < count($sensor_arr); $i++) {
