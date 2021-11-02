@@ -100,11 +100,10 @@ class data_analytics extends BaseController
             ->select(DB::raw('round((sum( ( '. $column1. '.value - @a1 ) * ('. $column2. '.value - @b1) ) / ((count('. $column1. '.value) -1) * @c1)), 4) as p'))
             ->whereColumn($where_column_arr);
             $sql2 = $query2->toSql();
-            $getBindings2 = $query2->getBindings();
-            $bindings = array_merge($getBindings, $getBindings2);
-            $bindings = array_merge($bindings, $getBindings2);
-            $bindings = array_merge($bindings, $getBindings2);
-            $bindings = array_merge($bindings, $getBindings2);
+            $bindings = array_merge($getBindings, $getBindings);
+            $bindings = array_merge($bindings, $bindings);
+            $bindings = array_merge($bindings, $bindings);
+            $bindings = array_merge($bindings, $bindings);
             dd($sql2,$bindings);
             // dd($query2,$getBindings);
             $query3 = DB::select($sql2, $bindings);
