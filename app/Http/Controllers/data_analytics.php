@@ -24,6 +24,7 @@ class data_analytics extends BaseController
         $select_concat_arr = [];
         $table = $column1. ', '. $column2;
         $groupby = '';
+        $tb_select_arr = [];
 
         array_push($select_arr,DB::raw('@a1:=AVG('. $column1. '.value)'));
         array_push($select_arr,DB::raw('@b1:=AVG('. $column2. '.value)'));
@@ -59,13 +60,6 @@ class data_analytics extends BaseController
             // dd($query3[0]->p);
             return $query3[0]->p;
         }elseif ($count_time == 'hour') {
-            // select round((sum( ( luminance.value - @a1 ) * (temp.value - @b1) ) / ((count(luminance.value) -1) * @c1)), 4) as p
-            // from
-            //     (SELECT date_format(time, "%Y-%m-%d %H") AS time, AVG(value) as value FROM luminance WHERE time between "2021-04-01 00:00:00" and "2021-05-01 00:00:00" GROUP BY date_format(time, "%Y-%m-%d %H")) as luminance
-            //     , (SELECT date_format(time, "%Y-%m-%d %H") AS time, AVG(value) as value FROM temp WHERE time between "2021-04-01 00:00:00" and "2021-05-01 00:00:00" GROUP BY date_format(time, "%Y-%m-%d %H")) as temp
-            //     , (select @a1:=AVG(luminance.value), @b1:=AVG(temp.value), @c1:=(stddev_samp(luminance.value) * stddev_samp(temp.value)) from (SELECT date_format(time, "%Y-%m-%d %H") AS time, AVG(value) as value FROM luminance WHERE time between "2021-04-01 00:00:00" and "2021-05-01 00:00:00" GROUP BY date_format(time, "%Y-%m-%d %H")) as luminance, (SELECT date_format(time, "%Y-%m-%d %H") AS time, AVG(value) as value FROM temp WHERE time between "2021-04-01 00:00:00" and "2021-05-01 00:00:00" GROUP BY date_format(time, "%Y-%m-%d %H")) as temp where (`luminance`.`time` = `temp`.`time`) and `luminance`.`time` between "2021-04-01 00:00:00" and "2021-05-01 00:00:00") as tb
-            // where (`luminance`.`time` = `temp`.`time`)
-            $tb_select_arr = [];
             array_push($tb_select_arr, DB::raw('date_format(time, "%Y-%m-%d %H") as time'));
             array_push($tb_select_arr, DB::raw('AVG(value) as value'));
             $groupby = DB::raw('date_format(time, "%Y-%m-%d %H")');
@@ -110,7 +104,49 @@ class data_analytics extends BaseController
             // dd($query3[0]->p);
             return $query3[0]->p;
         }elseif ($count_time == 'day') {
-            # code...
+            array_push($tb_select_arr, DB::raw('date_format(time, "%Y-%m-%d") as time'));
+            array_push($tb_select_arr, DB::raw('AVG(value) as value'));
+            $groupby = DB::raw('date_format(time, "%Y-%m-%d")');
+            $tb1 = DB::table($column1)
+            ->whereBetween('time' ,[$start_time, $end_time])
+            ->select($tb_select_arr)
+            ->groupBy($groupby)
+            ->tosql();
+
+            $tb2 = DB::table($column2)
+            ->whereBetween('time' ,[$start_time, $end_time])
+            ->select($tb_select_arr)
+            ->groupBy($groupby)
+            ->tosql();
+
+            $query = DB::table(DB::raw('('. $tb1 .') as ' . $column1 .', (' . $tb2 .') as ' . $column2))
+            ->whereColumn($where_column_arr)
+            ->whereBetween($column1. '.time' ,[$start_time, $end_time])
+            ->select($select_arr);
+
+
+            $sql = $query->toSql();
+            $getBindings = $query->getBindings();
+
+            // dd($sql,$getBindings);
+
+            // $getBindings = [$start_time,$end_time];
+            // $sql = str_replace('?', '%s', $query->toSql());
+            // $sql = sprintf($sql, ...$getBindings);
+
+            $query2 = DB::table(DB::raw('('. $tb1 .') as ' . $column1 .', (' . $tb2 .') as ' . $column2 .', ('. $sql. ') as tb'))
+            ->select(DB::raw('round((sum( ( '. $column1. '.value - @a1 ) * ('. $column2. '.value - @b1) ) / ((count('. $column1. '.value) -1) * @c1)), 4) as p'))
+            ->whereColumn($where_column_arr);
+            $sql2 = $query2->toSql();
+            $bindings = array_merge($getBindings, $getBindings);
+            $bindings = array_merge($bindings, $getBindings);
+            $bindings = array_merge($bindings, $getBindings);
+            $bindings = array_merge($bindings, $getBindings);
+            // dd($sql2,$bindings);
+            // dd($query2,$getBindings);
+            $query3 = DB::select($sql2, $bindings);
+            // dd($query3[0]->p);
+            return $query3[0]->p;
         }
     }
 
