@@ -104,7 +104,7 @@ class data_analytics extends BaseController
             $bindings = array_merge($bindings, $getBindings);
             $bindings = array_merge($bindings, $getBindings);
             $bindings = array_merge($bindings, $getBindings);
-            dd($sql2,$bindings);
+            // dd($sql2,$bindings);
             // dd($query2,$getBindings);
             $query3 = DB::select($sql2, $bindings);
             // dd($query3[0]->p);
