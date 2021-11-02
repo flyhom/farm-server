@@ -168,7 +168,7 @@ class data_analytics extends BaseController
         if ($count_time == 'min') {
             $sensor_arr = ['luminance', 'temp', 'humidity', 'soil_temp', 'soil_humid', 'ec', 'ph', 'atp', 'uv'];
         }else{
-            $sensor_arr = ['luminance', 'temp', 'humidity', 'soil_temp', 'soil_humid', 'ec', 'ph', 'atp', 'uv', 'rainfall'];
+            $sensor_arr = ['luminance', 'temp', 'humidity', 'soil_temp', 'soil_humid', 'ec', 'ph', 'rainfall', 'atp', 'uv'];
         }
         $corr = array();
         $tmp_arr = array();
