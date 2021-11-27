@@ -28,6 +28,7 @@ Route::post('chart', [data::class, 'chart']);
 // });
 Route::post('analytics/chart', [data_analytics::class, 'chart']);
 Route::post('analytics/correlation', [data_analytics::class, 'correlation']);
+Route::post('analytics/ahp', [data_analytics::class, 'ahp']);
 
 Route::post('update', [update_data::class, 'update']);
 

@@ -197,4 +197,79 @@ class data_analytics extends BaseController
         }
         return response()->json(['status' => 200, 'msg' => "成功", 'datas' => $corr]);
     }
+
+    public function ahp(Request $request)
+    {
+        date_default_timezone_set('Asia/Taipei');
+        $sensor_arr = ['luminance', 'temp', 'humidity', 'soil_temp', 'soil_humid', 'ec', 'ph'];
+        // , 'soil_temp', 'soil_humid', 'ec', 'ph'
+        $data = $request->all();
+        if (!$data) {
+            return response()->json(['status' => 400, 'msg' => "沒有傳送任何資料", 'request' => $request, 'request_data' => $data, 'request_data_content' => $request->getContent()]);
+        }
+        $start_time = $data["start_time"];
+        $end_time = $data["end_time"];
+        $count_time = $data["time"]; //min, hour, day
+        if (!$start_time) $start_time = '2021-04-01 00:00:00';
+        if (!$end_time) $end_time = '2021-05-01 00:00:00';
+        $corr = array();
+        $tmp_arr = array();
+        for ($i=0; $i < count($sensor_arr); $i++) {
+            $tmp_arr = array();
+            for ($j=0; $j < count($sensor_arr); $j++) {
+                // if ($j == 0) {
+                //     $tmp_arr = array_merge($tmp_arr, ["header" => $sensor_arr[$i]]);
+                // }
+                if ($i > $j) {
+                    $ans = (double)($corr[$sensor_arr[$j]][$sensor_arr[$i]]);
+                    $tmp_arr = array_merge($tmp_arr, [$sensor_arr[$j] => $ans]);
+                }else if($sensor_arr[$i] == $sensor_arr[$j]){
+                    // $tmp_arr = array_merge($tmp_arr, [$sensor_arr[$j] => 0]);
+                }else{
+                    $ans = $this->corr_sql($count_time, $sensor_arr[$i], $sensor_arr[$j], $start_time, $end_time);
+                    $tmp_arr = array_merge($tmp_arr, [$sensor_arr[$j] => $ans]);
+                }
+            }
+            $corr = array_merge($corr, [$sensor_arr[$i] => $tmp_arr]);
+        }
+
+        // dd($corr);
+        if (!$corr) {
+            return response()->json(['status' => 200, 'msg' => "查無紀錄", 'datas' => $corr]);
+        }
+        $ahp_tmp = array();
+        for ($i=0; $i < count($sensor_arr); $i++) {
+            $tmp_sensors = $sensor_arr;
+            unset($tmp_sensors[$i]);
+            $tmp_sensors = array_values($tmp_sensors);
+            $ahp_tree = $this->tree($sensor_arr[$i], $tmp_sensors, $corr);
+            // dd($sensor_arr[$i],$sensor_arr,$tmp_sensors,$ahp_tree,$corr);
+            array_push($ahp_tmp, ['name' => $sensor_arr[$i], 'children' => $ahp_tree]);
+        }
+        return response()->json(['status' => 200, 'msg' => "成功", 'datas' => $ahp_tmp]);
+
+    }
+
+    public function tree($sensor, $sensors, $corr)
+    {
+        $tmp_arr = array();
+        // if (($key = array_search($del_val, $messages)) !== false) {
+        //     unset($messages[$key]);
+        // }
+        // dd($sensor,$sensors,$corr[$sensor][$sensors[0]]);
+        if (count($sensors) == 1) {
+            return ['name' => (string)($sensors[0]) . ' ' . (string)($corr[$sensor][$sensors[0]])];
+        }else{
+            for ($i=0; $i < count($sensors); $i++) {
+                $tmp_sensors = $sensors;
+                unset($tmp_sensors[$i]);
+                $tmp_sensors = array_values($tmp_sensors);
+                $ahp = $this->tree($sensors[$i], $tmp_sensors, $corr);
+                // dd($sensors,$tmp_sensors,$ahp);
+                array_push($tmp_arr, ['name' => $sensors[$i] . ' ' . (string)($corr[$sensor][$sensors[$i]]), 'children' => $ahp]);
+            }
+            // dd($tmp_arr);
+            return $tmp_arr;
+        }
+    }
 }
