@@ -217,9 +217,6 @@ class data_analytics extends BaseController
         for ($i=0; $i < count($sensor_arr); $i++) {
             $tmp_arr = array();
             for ($j=0; $j < count($sensor_arr); $j++) {
-                // if ($j == 0) {
-                //     $tmp_arr = array_merge($tmp_arr, ["header" => $sensor_arr[$i]]);
-                // }
                 if ($i > $j) {
                     $ans = (double)($corr[$sensor_arr[$j]][$sensor_arr[$i]]);
                     $tmp_arr = array_merge($tmp_arr, [$sensor_arr[$j] => $ans]);
@@ -243,20 +240,15 @@ class data_analytics extends BaseController
             unset($tmp_sensors[$i]);
             $tmp_sensors = array_values($tmp_sensors);
             $ahp_tree = $this->tree($sensor_arr[$i], $tmp_sensors, $corr);
-            // dd($sensor_arr[$i],$sensor_arr,$tmp_sensors,$ahp_tree,$corr);
             array_push($ahp_tmp, ['name' => $sensor_arr[$i], 'children' => $ahp_tree]);
         }
-        return response()->json(['status' => 200, 'msg' => "成功", 'datas' => $ahp_tmp]);
+        return response()->json(['status' => 200, 'msg' => "成功", 'datas' => ['name' => '樹狀圖', 'children' => $ahp_tmp]]);
 
     }
 
     public function tree($sensor, $sensors, $corr)
     {
         $tmp_arr = array();
-        // if (($key = array_search($del_val, $messages)) !== false) {
-        //     unset($messages[$key]);
-        // }
-        // dd($sensor,$sensors,$corr[$sensor][$sensors[0]]);
         if (count($sensors) == 1) {
             return ['name' => (string)($sensors[0]) . ' ' . (string)($corr[$sensor][$sensors[0]])];
         }else{
@@ -265,10 +257,8 @@ class data_analytics extends BaseController
                 unset($tmp_sensors[$i]);
                 $tmp_sensors = array_values($tmp_sensors);
                 $ahp = $this->tree($sensors[$i], $tmp_sensors, $corr);
-                // dd($sensors,$tmp_sensors,$ahp);
                 array_push($tmp_arr, ['name' => $sensors[$i] . ' ' . (string)($corr[$sensor][$sensors[$i]]), 'children' => $ahp]);
             }
-            // dd($tmp_arr);
             return $tmp_arr;
         }
     }
