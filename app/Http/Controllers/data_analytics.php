@@ -202,6 +202,7 @@ class data_analytics extends BaseController
     {
         date_default_timezone_set('Asia/Taipei');
         $sensor_arr = ['luminance', 'temp', 'humidity', 'soil_temp', 'soil_humid', 'ec', 'ph'];
+        $sensors_key = [['luminance' => 'l'], ['temp' => 't'], ['humidity' => 'h'], ['soil_temp' => 'st'], ['soil_humid' => 'sh'], ['ec' => 'ec'], ['ph' => 'ph']];
         // , 'soil_temp', 'soil_humid', 'ec', 'ph'
         $data = $request->all();
         if (!$data) {
@@ -239,25 +240,26 @@ class data_analytics extends BaseController
             $tmp_sensors = $sensor_arr;
             unset($tmp_sensors[$i]);
             $tmp_sensors = array_values($tmp_sensors);
-            $ahp_tree = $this->tree($sensor_arr[$i], $tmp_sensors, $corr);
+            $ahp_tree = $this->tree($sensor_arr[$i], $tmp_sensors, $sensors_key, $corr);
             array_push($ahp_tmp, ['name' => $sensor_arr[$i], 'children' => $ahp_tree]);
         }
         return response()->json(['status' => 200, 'msg' => "成功", 'datas' => ['name' => '樹狀圖', 'children' => $ahp_tmp]]);
 
     }
 
-    public function tree($sensor, $sensors, $corr)
+    public function tree($sensor, $sensors, $sensors_key, $corr)
     {
         $tmp_arr = array();
         if (count($sensors) == 1) {
-            return [['name' => (string)($sensors[0]) . ' ' . (string)($corr[$sensor][$sensors[0]])]];
+            // return [['name' => (string)($sensors[0]) . ' ' . (string)($corr[$sensor][$sensors[0]])]];
+            return [['name' => (string)($sensors_key[$sensors[0]]) . ' ' . (string)($corr[$sensor][$sensors[0]])]];
         }else{
             for ($i=0; $i < count($sensors); $i++) {
                 $tmp_sensors = $sensors;
                 unset($tmp_sensors[$i]);
                 $tmp_sensors = array_values($tmp_sensors);
-                $ahp = $this->tree($sensors[$i], $tmp_sensors, $corr);
-                array_push($tmp_arr, ['name' => $sensors[$i] . ' ' . (string)($corr[$sensor][$sensors[$i]]), 'children' => $ahp]);
+                $ahp = $this->tree($sensors[$i], $tmp_sensors, $sensors_key, $corr);
+                array_push($tmp_arr, ['name' => $sensors_key[$sensors[$i]] . ' ' . (string)($corr[$sensor][$sensors[$i]]), 'children' => $ahp]);
             }
             return $tmp_arr;
         }
