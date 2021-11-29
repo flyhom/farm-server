@@ -48,7 +48,7 @@ class data_analytics extends BaseController
             // $sql = sprintf($sql, ...$getBindings);
 
             $query2 = DB::table(DB::raw($table .', ('. $sql. ') as tb'))
-            ->select(DB::raw('round((sum( ( '. $column1. '.value - @a1 ) * ('. $column2. '.value - @b1) ) / ((count('. $column1. '.value) -1) * @c1)), 4) as p'))
+            ->select(DB::raw('round((sum( ( '. $column1. '.value - @a1 ) * ('. $column2. '.value - @b1) ) / ((count('. $column1. '.value) -1) * @c1)), 2) as p'))
             ->whereColumn($where_column_arr)
             ->whereBetween($column1. '.time' ,[$start_time, $end_time]);
             $sql2 = $query2->toSql();
@@ -202,7 +202,7 @@ class data_analytics extends BaseController
     {
         date_default_timezone_set('Asia/Taipei');
         $sensor_arr = ['luminance', 'temp', 'humidity', 'soil_temp', 'soil_humid', 'ec', 'ph'];
-        $sensors_key = [['luminance' => 'l'], ['temp' => 't'], ['humidity' => 'h'], ['soil_temp' => 'st'], ['soil_humid' => 'sh'], ['ec' => 'ec'], ['ph' => 'ph']];
+        $sensors_key = ['luminance' => 'l', 'temp' => 't', 'humidity' => 'h', 'soil_temp' => 'st', 'soil_humid' => 'sh', 'ec' => 'ec', 'ph' => 'ph'];
         // , 'soil_temp', 'soil_humid', 'ec', 'ph'
         $data = $request->all();
         if (!$data) {
