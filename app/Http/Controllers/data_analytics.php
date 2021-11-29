@@ -250,7 +250,7 @@ class data_analytics extends BaseController
     {
         $tmp_arr = array();
         if (count($sensors) == 1) {
-            return ['name' => (string)($sensors[0]) . ' ' . (string)($corr[$sensor][$sensors[0]])];
+            return [['name' => (string)($sensors[0]) . ' ' . (string)($corr[$sensor][$sensors[0]])]];
         }else{
             for ($i=0; $i < count($sensors); $i++) {
                 $tmp_sensors = $sensors;
