@@ -243,7 +243,7 @@ class data_analytics extends BaseController
             $ahp_tree = $this->tree($sensor_arr[$i], $tmp_sensors, $sensors_key, $corr);
             array_push($ahp_tmp, ['name' => $sensor_arr[$i], 'children' => $ahp_tree]);
         }
-        return response()->json(['status' => 200, 'msg' => "成功", 'datas' => ['name' => '樹狀圖', 'children' => $ahp_tmp]]);
+        return response()->json(['status' => 200, 'msg' => "成功", 'datas' => ['name' => 'Root', 'children' => $ahp_tmp]]);
 
     }
 
